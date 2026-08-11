@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Heart, Search } from 'lucide-react';
+import { Heart, Search, X, ShoppingBag } from 'lucide-react';
 
 const categories = [
   "All",
@@ -40,8 +40,20 @@ export default function Store() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("default");
+  
+  // Wishlist States
+  const [wishlist, setWishlist] = useState([]);
+  const [isWishlistOpen, setIsWishlistOpen] = useState(false);
 
-  // Filter products by Category & Search
+  // Wishlist Toggle Function
+  const toggleWishlist = (product) => {
+    if (wishlist.some(item => item.id === product.id)) {
+      setWishlist(wishlist.filter(item => item.id !== product.id));
+    } else {
+      setWishlist([...wishlist, product]);
+    }
+  };
+
   const filteredProducts = productsData
     .filter((product) => {
       const matchesCategory = activeCategory === "All" || product.category === activeCategory;
@@ -55,26 +67,40 @@ export default function Store() {
     });
 
   return (
-    <div className="min-h-screen bg-[#faf9f6] text-gray-800 px-6 py-10 font-sans">
+    <div className="min-h-screen bg-[#faf9f6] text-gray-800 px-6 py-10 font-sans relative">
       <div className="max-w-7xl mx-auto">
         
-        {/* Subtitle */}
-        <p className="text-xs tracking-widest text-amber-800 uppercase font-semibold mb-1">
-          BROWSE
-        </p>
+        {/* Header with Wishlist Button */}
+        <div className="flex justify-between items-start mb-6">
+          <div>
+            <p className="text-xs tracking-widest text-amber-800 uppercase font-semibold mb-1">
+              BROWSE
+            </p>
+            <h1 className="text-4xl font-serif font-bold text-gray-900 mb-1">
+              All Products
+            </h1>
+            <p className="text-gray-500 text-sm">
+              {filteredProducts.length} products found
+            </p>
+          </div>
 
-        {/* Heading & Count */}
-        <h1 className="text-4xl font-serif font-bold text-gray-900 mb-1">
-          All Products
-        </h1>
-        <p className="text-gray-500 text-sm mb-8">
-          {filteredProducts.length} products found
-        </p>
+          {/* Top Wishlist Icon */}
+          <button 
+            onClick={() => setIsWishlistOpen(true)}
+            className="relative flex items-center gap-2 bg-white px-4 py-2 rounded-full border border-gray-200 shadow-sm hover:shadow transition-all"
+          >
+            <Heart className="w-5 h-5 text-red-500 fill-red-500" />
+            <span className="font-semibold text-sm">Wishlist</span>
+            {wishlist.length > 0 && (
+              <span className="bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                {wishlist.length}
+              </span>
+            )}
+          </button>
+        </div>
 
-        {/* Categories Buttons & Search/Sort Bar */}
+        {/* Category Filter Buttons */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
-          
-          {/* Category Filter Buttons */}
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
               <button
@@ -91,9 +117,8 @@ export default function Store() {
             ))}
           </div>
 
-          {/* Search & Sort Input Controls */}
+          {/* Search & Sort */}
           <div className="flex items-center gap-3">
-            {/* Search Box */}
             <div className="relative">
               <input
                 type="text"
@@ -105,7 +130,6 @@ export default function Store() {
               <Search className="w-4 h-4 text-gray-400 absolute right-3 top-2.5" />
             </div>
 
-            {/* Sort Dropdown */}
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
@@ -120,46 +144,95 @@ export default function Store() {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredProducts.map((product) => (
-            <div
-              key={product.id}
-              className="bg-white rounded-2xl p-3 border border-gray-100 shadow-sm hover:shadow-md transition-shadow group relative flex flex-col justify-between"
-            >
-              {/* Product Image Box */}
-              <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-gray-100 mb-3">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                {/* Wishlist Button */}
-                <button className="absolute top-3 right-3 p-1.5 bg-white/80 hover:bg-white rounded-full text-gray-600 hover:text-red-500 shadow-sm transition-colors">
-                  <Heart className="w-4 h-4" />
+          {filteredProducts.map((product) => {
+            const isLiked = wishlist.some(item => item.id === product.id);
+            return (
+              <div
+                key={product.id}
+                className="bg-white rounded-2xl p-3 border border-gray-100 shadow-sm hover:shadow-md transition-shadow group relative flex flex-col justify-between"
+              >
+                <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-gray-100 mb-3">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  {/* Heart Button */}
+                  <button 
+                    onClick={() => toggleWishlist(product)}
+                    className="absolute top-3 right-3 p-1.5 bg-white/90 hover:bg-white rounded-full shadow-sm transition-all"
+                  >
+                    <Heart 
+                      className={`w-4 h-4 ${isLiked ? "text-red-500 fill-red-500" : "text-gray-600"}`} 
+                    />
+                  </button>
+                </div>
+
+                <div>
+                  <p className="text-xs text-gray-400 mb-0.5">{product.category}</p>
+                  <h3 className="font-semibold text-gray-900 text-sm mb-1 truncate">
+                    {product.name}
+                  </h3>
+                  <p className="text-black font-bold text-base">
+                    ${product.price}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Wishlist Drawer / Modal */}
+      {isWishlistOpen && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex justify-end">
+          <div className="bg-white w-full max-w-md h-full p-6 flex flex-col justify-between shadow-2xl">
+            <div>
+              <div className="flex justify-between items-center pb-4 border-b">
+                <h2 className="text-xl font-bold flex items-center gap-2">
+                  <Heart className="w-5 h-5 text-red-500 fill-red-500" /> My Wishlist ({wishlist.length})
+                </h2>
+                <button 
+                  onClick={() => setIsWishlistOpen(false)}
+                  className="p-1 rounded-full hover:bg-gray-100"
+                >
+                  <X className="w-6 h-6" />
                 </button>
               </div>
 
-              {/* Product Info */}
-              <div>
-                <p className="text-xs text-gray-400 mb-0.5">{product.category}</p>
-                <h3 className="font-semibold text-gray-900 text-sm mb-1 truncate">
-                  {product.name}
-                </h3>
-                <p className="text-black font-bold text-base">
-                  ${product.price}
-                </p>
+              {/* Wishlist Items List */}
+              <div className="mt-4 space-y-4 max-h-[70vh] overflow-y-auto">
+                {wishlist.length === 0 ? (
+                  <p className="text-gray-500 text-center py-8">Your wishlist is empty!</p>
+                ) : (
+                  wishlist.map((item) => (
+                    <div key={item.id} className="flex items-center gap-4 p-2 border rounded-xl">
+                      <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded-lg" />
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-sm">{item.name}</h4>
+                        <p className="text-gray-500 text-xs">${item.price}</p>
+                      </div>
+                      <button 
+                        onClick={() => toggleWishlist(item)}
+                        className="text-xs text-red-500 hover:underline px-2 py-1"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
-          ))}
-        </div>
 
-        {/* Empty State Notice */}
-        {filteredProducts.length === 0 && (
-          <div className="text-center py-16 text-gray-500">
-            No products found matching your search or selected category.
+            <button 
+              onClick={() => setIsWishlistOpen(false)}
+              className="w-full bg-black text-white py-3 rounded-xl font-semibold mt-4"
+            >
+              Continue Shopping
+            </button>
           </div>
-        )}
-
-      </div>
+        </div>
+      )}
     </div>
   );
 }
