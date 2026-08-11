@@ -1,419 +1,165 @@
 import React, { useState } from 'react';
-import { Heart, ShoppingCart, Wrench, Trash2, Plus, Minus, LogOut } from 'lucide-react';
+import { Heart, Search } from 'lucide-react';
 
-const initialProducts = [
-  {
-    id: 1,
-    name: "Wireless Bluetooth Headphones",
-    category: "ELECTRONICS",
-    price: 99.99,
-    description: "High-quality sound with noise cancellation technology.",
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500"
-  },
-  {
-    id: 2,
-    name: "Smart Fitness Watch",
-    category: "ELECTRONICS",
-    price: 149.99,
-    description: "Track your daily activities, heart rate, and workouts effortlessly.",
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500"
-  },
-  {
-    id: 3,
-    name: "Classic Leather Jacket",
-    category: "FASHION",
-    price: 199.99,
-    description: "Stylish premium leather jacket for modern fashion.",
-    image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500"
-  },
-  {
-    id: 4,
-    name: "boAt Wave Call Smartwatch",
-    category: "ELECTRONICS",
-    price: 49.99,
-    description: "1.69 HD display with Bluetooth calling, 550 nits brightness, and health monitoring.",
-    image: "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=500"
-  },
-  {
-    id: 5,
-    name: "Minimalist Mechanical Keyboard",
-    category: "ELECTRONICS",
-    price: 79.99,
-    description: "RGB backlit mechanical keyboard with tactile switches.",
-    image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500"
-  }
+const categories = [
+  "All",
+  "Shoes",
+  "Electronics",
+  "Bags",
+  "Clothing",
+  "Accessories",
+  "Sports",
+  "Watches",
+  "Skincare",
+  "Books",
+  "Kitchen",
+  "Toys & Games",
+  "Jewelry"
 ];
 
-export default function App() {
-  // Yahan 'cart' ki jagah 'home' kar diya hai
-  const [currentPage, setCurrentPage] = useState('home');
-  const [user, setUser] = useState({ name: 'baba', role: 'admin' });
-  const [products, setProducts] = useState(initialProducts);
-  
-  // Cart pre-populated with 4 Jackets, 3 Watches, 1 Headphone, 1 Keyboard
-  const [cart, setCart] = useState([
-    { ...initialProducts[2], quantity: 4 }, 
-    { ...initialProducts[3], quantity: 3 }, 
-    { ...initialProducts[0], quantity: 1 }, 
-    { ...initialProducts[4], quantity: 1 }  
-  ]);
-  
-  const [wishlist, setWishlist] = useState([initialProducts[0], initialProducts[1]]);
+const productsData = [
+  { id: 1, name: "Nike Black Running Shoes", category: "Shoes", price: 120, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" },
+  { id: 2, name: "Metallic Silver Sneakers", category: "Shoes", price: 135, image: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500" },
+  { id: 3, name: "Blue Sport Athletic Shoes", category: "Shoes", price: 110, image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500" },
+  { id: 4, name: "Classic Grey Air Max", category: "Shoes", price: 145, image: "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=500" },
+  { id: 5, name: "Wireless Headphones", category: "Electronics", price: 85, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500" },
+  { id: 6, name: "Smart Fitness Watch", category: "Watches", price: 199, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500" },
+  { id: 7, name: "Leather Backpack", category: "Bags", price: 95, image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500" },
+  { id: 8, name: "Casual Denim Jacket", category: "Clothing", price: 75, image: "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=500" },
+  { id: 9, name: "Polarized Sunglasses", category: "Accessories", price: 45, image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500" },
+  { id: 10, name: "Hydrating Facial Serum", category: "Skincare", price: 35, image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500" },
+  { id: 11, name: "Pro Football Leather", category: "Sports", price: 40, image: "https://images.unsplash.com/photo-1614632537190-23e4146777db?w=500" },
+  { id: 12, name: "Bestseller Novel Book", category: "Books", price: 20, image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500" },
+  { id: 13, name: "Stainless Steel Chef Knife", category: "Kitchen", price: 60, image: "https://images.unsplash.com/photo-1593618998160-e34014e67546?w=500" },
+  { id: 14, name: "Wooden Building Blocks", category: "Toys & Games", price: 30, image: "https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=500" },
+  { id: 15, name: "18K Gold Plated Ring", category: "Jewelry", price: 150, image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=500" },
+  { id: 16, name: "Minimalist Chronograph Watch", category: "Watches", price: 210, image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=500" }
+];
 
-  // Admin New Product State
-  const [newProduct, setNewProduct] = useState({
-    name: '', category: 'ELECTRONICS', price: '', description: '', image: ''
-  });
+export default function Store() {
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("default");
 
-  // Toggle Wishlist
-  const toggleWishlist = (product) => {
-    if (wishlist.some(item => item.id === product.id)) {
-      setWishlist(wishlist.filter(item => item.id !== product.id));
-    } else {
-      setWishlist([...wishlist, product]);
-    }
-  };
-
-  // Add to Cart
-  const addToCart = (product) => {
-    const existing = cart.find(item => item.id === product.id);
-    if (existing) {
-      setCart(cart.map(item => item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item));
-    } else {
-      setCart([...cart, { ...product, quantity: 1 }]);
-    }
-  };
-
-  // Update Cart Quantity
-  const updateQuantity = (id, amount) => {
-    setCart(cart.map(item => {
-      if (item.id === id) {
-        const newQty = item.quantity + amount;
-        return newQty > 0 ? { ...item, quantity: newQty } : item;
-      }
-      return item;
-    }));
-  };
-
-  // Remove from Cart
-  const removeFromCart = (id) => {
-    setCart(cart.filter(item => item.id !== id));
-  };
-
-  // Add New Product (Admin)
-  const handleAddProduct = (e) => {
-    e.preventDefault();
-    if (!newProduct.name || !newProduct.price) return;
-    const addedItem = {
-      ...newProduct,
-      id: Date.now(),
-      price: parseFloat(newProduct.price),
-      image: newProduct.image || "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500"
-    };
-    setProducts([...products, addedItem]);
-    setNewProduct({ name: '', category: 'ELECTRONICS', price: '', description: '', image: '' });
-    alert("Product added successfully!");
-  };
-
-  // Total Cart Price
-  const totalCartPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+  // Filter products by Category & Search
+  const filteredProducts = productsData
+    .filter((product) => {
+      const matchesCategory = activeCategory === "All" || product.category === activeCategory;
+      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesCategory && matchesSearch;
+    })
+    .sort((a, b) => {
+      if (sortBy === "low") return a.price - b.price;
+      if (sortBy === "high") return b.price - a.price;
+      return 0;
+    });
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      {/* Navbar */}
-      <nav className="bg-blue-600 text-white px-6 py-3 flex items-center justify-between shadow-md sticky top-0 z-50">
-        <button 
-          onClick={() => setCurrentPage('home')} 
-          className="text-2xl font-extrabold tracking-wide text-white focus:outline-none"
-        >
-          JAWAD KHAN STORE
-        </button>
+    <div className="min-h-screen bg-[#faf9f6] text-gray-800 px-6 py-10 font-sans">
+      <div className="max-w-7xl mx-auto">
+        
+        {/* Subtitle */}
+        <p className="text-xs tracking-widest text-amber-800 uppercase font-semibold mb-1">
+          BROWSE
+        </p>
 
-        <div className="flex items-center space-x-6 text-sm font-medium">
-          <button 
-            onClick={() => setCurrentPage('home')} 
-            className={`hover:text-yellow-300 transition ${currentPage === 'home' ? 'text-yellow-300 font-bold underline' : ''}`}
-          >
-            Home
-          </button>
+        {/* Heading & Count */}
+        <h1 className="text-4xl font-serif font-bold text-gray-900 mb-1">
+          All Products
+        </h1>
+        <p className="text-gray-500 text-sm mb-8">
+          {filteredProducts.length} products found
+        </p>
 
-          <button 
-            onClick={() => setCurrentPage('products')} 
-            className={`hover:text-yellow-300 transition ${currentPage === 'products' ? 'text-yellow-300 font-bold underline' : ''}`}
-          >
-            Products
-          </button>
-
-          <button 
-            onClick={() => setCurrentPage('wishlist')} 
-            className={`flex items-center space-x-1 hover:text-yellow-300 transition ${currentPage === 'wishlist' ? 'text-yellow-300 font-bold underline' : ''}`}
-          >
-            <Heart className={`w-4 h-4 ${wishlist.length > 0 ? 'fill-current text-red-400' : ''}`} />
-            <span>Wishlist ({wishlist.length})</span>
-          </button>
-
-          <button 
-            onClick={() => setCurrentPage('cart')} 
-            className={`flex items-center space-x-1 hover:text-yellow-300 transition ${currentPage === 'cart' ? 'text-yellow-300 font-bold underline' : ''}`}
-          >
-            <ShoppingCart className="w-4 h-4" />
-            <span>Cart ({cart.reduce((a, b) => a + b.quantity, 0)})</span>
-          </button>
-
-          {user && user.role === 'admin' && (
-            <button 
-              onClick={() => setCurrentPage('admin')} 
-              className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded-md text-xs font-semibold flex items-center space-x-1 transition"
-            >
-              <Wrench className="w-3 h-3" />
-              <span>Admin</span>
-            </button>
-          )}
-
-          {user ? (
-            <div className="flex items-center space-x-3">
-              <span className="text-yellow-300 font-semibold text-sm">
-                Hi, am {user.name}
-              </span>
-              <button 
-                onClick={() => setUser(null)} 
-                className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-xs font-bold transition flex items-center space-x-1"
+        {/* Categories Buttons & Search/Sort Bar */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
+          
+          {/* Category Filter Buttons */}
+          <div className="flex flex-wrap gap-2">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors border ${
+                  activeCategory === cat
+                    ? "bg-black text-white border-black"
+                    : "bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200"
+                }`}
               >
-                <LogOut className="w-3 h-3" />
-                <span>Logout</span>
+                {cat}
               </button>
-            </div>
-          ) : (
-            <button 
-              onClick={() => setUser({ name: 'baba', role: 'admin' })} 
-              className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-xs font-bold transition"
-            >
-              Login
-            </button>
-          )}
-        </div>
-      </nav>
+            ))}
+          </div>
 
-      {/* Main View */}
-      <main className="max-w-6xl mx-auto py-8 px-4">
-        {/* Cart Page */}
-        {currentPage === 'cart' && (
-          <div>
-            <h1 className="text-3xl font-extrabold text-center text-slate-800 mb-8">Shopping Cart 🛒</h1>
-            {cart.length === 0 ? (
-              <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
-                <p className="text-gray-500 text-lg">Your cart is empty!</p>
-                <button 
-                  onClick={() => setCurrentPage('products')} 
-                  className="mt-4 bg-blue-600 text-white px-5 py-2 rounded-md font-semibold"
-                >
-                  Start Shopping
+          {/* Search & Sort Input Controls */}
+          <div className="flex items-center gap-3">
+            {/* Search Box */}
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-48 sm:w-60 pl-4 pr-9 py-2 border border-gray-300 rounded-full text-sm focus:outline-none focus:border-black bg-white"
+              />
+              <Search className="w-4 h-4 text-gray-400 absolute right-3 top-2.5" />
+            </div>
+
+            {/* Sort Dropdown */}
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-full text-sm focus:outline-none bg-white text-gray-700 cursor-pointer"
+            >
+              <option value="default">Sort by</option>
+              <option value="low">Price: Low to High</option>
+              <option value="high">Price: High to Low</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Products Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {filteredProducts.map((product) => (
+            <div
+              key={product.id}
+              className="bg-white rounded-2xl p-3 border border-gray-100 shadow-sm hover:shadow-md transition-shadow group relative flex flex-col justify-between"
+            >
+              {/* Product Image Box */}
+              <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-gray-100 mb-3">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                {/* Wishlist Button */}
+                <button className="absolute top-3 right-3 p-1.5 bg-white/80 hover:bg-white rounded-full text-gray-600 hover:text-red-500 shadow-sm transition-colors">
+                  <Heart className="w-4 h-4" />
                 </button>
               </div>
-            ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2 space-y-4">
-                  {cart.map((item) => (
-                    <div key={item.id} className="bg-white p-4 rounded-lg border border-gray-200 flex items-center justify-between shadow-sm">
-                      <div className="flex items-center space-x-4">
-                        <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded-md" />
-                        <div>
-                          <h3 className="font-bold text-gray-800">{item.name}</h3>
-                          <p className="text-sm font-semibold text-gray-600">${item.price.toFixed(2)}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-4">
-                        <div className="flex items-center border rounded-md">
-                          <button onClick={() => updateQuantity(item.id, -1)} className="p-1 hover:bg-gray-100"><Minus className="w-4 h-4" /></button>
-                          <span className="px-3 font-semibold text-sm">{item.quantity}</span>
-                          <button onClick={() => updateQuantity(item.id, 1)} className="p-1 hover:bg-gray-100"><Plus className="w-4 h-4" /></button>
-                        </div>
-                        <button onClick={() => removeFromCart(item.id)} className="text-red-500 hover:text-red-700">
-                          <Trash2 className="w-5 h-5" />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
 
-                {/* Cart Summary */}
-                <div className="bg-white p-6 rounded-lg border border-gray-200 h-fit shadow-sm">
-                  <h2 className="text-xl font-bold text-gray-800 mb-4">Order Summary</h2>
-                  <div className="flex justify-between mb-2 text-gray-600">
-                    <span>Subtotal</span>
-                    <span>${totalCartPrice.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between mb-2 text-gray-600">
-                    <span>Shipping</span>
-                    <span className="text-green-600 font-semibold">FREE</span>
-                  </div>
-                  <hr className="my-4" />
-                  <div className="flex justify-between text-lg font-bold text-gray-900 mb-6">
-                    <span>Total</span>
-                    <span>${totalCartPrice.toFixed(2)}</span>
-                  </div>
-                  <button 
-                    onClick={() => alert("Checkout complete! Order placed.")}
-                    className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-md transition"
-                  >
-                    Proceed to Checkout
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Home Page */}
-        {currentPage === 'home' && (
-          <div className="text-center py-16 px-4 bg-white rounded-xl shadow-sm border border-gray-200">
-            <span className="bg-blue-100 text-blue-600 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
-              WELCOME TO JAWAD KHAN STORE
-            </span>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-800 mt-6 tracking-tight">
-              Discover Premium Quality<br />Products Online
-            </h1>
-            <p className="text-gray-600 max-w-xl mx-auto mt-4 text-sm leading-relaxed">
-              Shop the best deals on fashion, electronics, and everyday essentials.
-            </p>
-            <div className="mt-8">
-              <button 
-                onClick={() => setCurrentPage('products')} 
-                className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2.5 rounded-md shadow transition"
-              >
-                Shop Now 🚀
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Products Page */}
-        {currentPage === 'products' && (
-          <div>
-            <h1 className="text-3xl font-extrabold text-center text-slate-800 mb-8">Our Products</h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {products.map((item) => {
-                const isLiked = wishlist.some(w => w.id === item.id);
-                return (
-                  <div key={item.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden relative">
-                    <button 
-                      onClick={() => toggleWishlist(item)}
-                      className="absolute top-3 right-3 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition z-10"
-                    >
-                      <Heart className={`w-5 h-5 ${isLiked ? 'text-red-500 fill-current' : 'text-gray-400'}`} />
-                    </button>
-                    <img src={item.image} alt={item.name} className="w-full h-48 object-cover" />
-                    <div className="p-4">
-                      <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">{item.category}</span>
-                      <h2 className="text-lg font-bold text-gray-800 mt-1">{item.name}</h2>
-                      <p className="text-sm text-gray-600 mt-1 line-clamp-2">{item.description}</p>
-                      <p className="text-xl font-extrabold text-gray-900 mt-3">${item.price.toFixed(2)}</p>
-                      <button 
-                        onClick={() => addToCart(item)}
-                        className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition"
-                      >
-                        Add to Cart
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Wishlist Page */}
-        {currentPage === 'wishlist' && (
-          <div>
-            <h1 className="text-3xl font-extrabold text-center text-slate-800 mb-8">My Wishlist ❤️</h1>
-            {wishlist.length === 0 ? (
-              <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
-                <p className="text-gray-500 text-lg">Your wishlist is empty!</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {wishlist.map((item) => (
-                  <div key={item.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden relative">
-                    <button 
-                      onClick={() => toggleWishlist(item)}
-                      className="absolute top-3 right-3 bg-white p-2 rounded-full shadow text-red-500 hover:bg-gray-100"
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
-                    <img src={item.image} alt={item.name} className="w-full h-48 object-cover" />
-                    <div className="p-4">
-                      <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">{item.category}</span>
-                      <h2 className="text-lg font-bold text-gray-800 mt-1">{item.name}</h2>
-                      <p className="text-xl font-extrabold text-gray-900 mt-3">${item.price.toFixed(2)}</p>
-                      <button 
-                        onClick={() => addToCart(item)}
-                        className="w-full mt-4 bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-700 transition"
-                      >
-                        Move to Cart
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Admin Dashboard */}
-        {currentPage === 'admin' && (
-          <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 max-w-2xl mx-auto">
-            <h1 className="text-2xl font-bold text-slate-800 mb-6 flex items-center space-x-2">
-              <Wrench className="w-6 h-6 text-purple-600" />
-              <span>Admin Panel - Add New Product</span>
-            </h1>
-            <form onSubmit={handleAddProduct} className="space-y-4">
+              {/* Product Info */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Product Title</label>
-                <input 
-                  type="text" 
-                  value={newProduct.name} 
-                  onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-                  className="w-full border border-gray-300 p-2.5 rounded-md"
-                  placeholder="e.g. Wireless Mouse"
-                  required 
-                />
+                <p className="text-xs text-gray-400 mb-0.5">{product.category}</p>
+                <h3 className="font-semibold text-gray-900 text-sm mb-1 truncate">
+                  {product.name}
+                </h3>
+                <p className="text-black font-bold text-base">
+                  ${product.price}
+                </p>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">Category</label>
-                  <select 
-                    value={newProduct.category} 
-                    onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
-                    className="w-full border border-gray-300 p-2.5 rounded-md"
-                  >
-                    <option value="ELECTRONICS">ELECTRONICS</option>
-                    <option value="FASHION">FASHION</option>
-                    <option value="FURNITURE">FURNITURE</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">Price ($)</label>
-                  <input 
-                    type="number" 
-                    step="0.01" 
-                    value={newProduct.price} 
-                    onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
-                    className="w-full border border-gray-300 p-2.5 rounded-md"
-                    placeholder="29.99"
-                    required 
-                  />
-                </div>
-              </div>
-              <button 
-                type="submit" 
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-md transition"
-              >
-                Add Product to Store
-              </button>
-            </form>
+            </div>
+          ))}
+        </div>
+
+        {/* Empty State Notice */}
+        {filteredProducts.length === 0 && (
+          <div className="text-center py-16 text-gray-500">
+            No products found matching your search or selected category.
           </div>
         )}
-      </main>
+
+      </div>
     </div>
   );
 }
