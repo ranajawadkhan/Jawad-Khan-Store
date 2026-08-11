@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { Heart, ShoppingCart, Trash2, Plus, Minus, Search, CheckCircle, CreditCard, DollarSign } from 'lucide-react';
+import { Heart, ShoppingCart, Trash2, Plus, Minus, Search, CheckCircle, CreditCard, DollarSign, Home } from 'lucide-react';
 import { auth, provider, signInWithPopup, signOut } from './firebase';
 
 const categories = [
-  "All", "Shoes", "Electronics", "Bags", "Clothing", "Accessories", "Sports", "Watches", "Skincare", "Books", "Kitchen", "Toys & Games", "Jewelry"
+  "All", "Shoes", "Electronics", "Bags", "Clothing", "Sports", "Watches", "Skincare", "Books", "Kitchen", "Toys", "Games", "Jewelry"
 ];
 
-// Expanded product list with at least 10 products per main category
 const initialProducts = [
   // --- SHOES (10 Types) ---
   { id: 101, name: "Nike Air Max Stealth Black", category: "Shoes", price: 129.99, description: "Running Shoes - Lightweight breathable mesh.", image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" },
@@ -80,18 +79,6 @@ const initialProducts = [
   { id: 609, name: "Fitness Tracker Slim Band", category: "Watches", price: 34.99, description: "Fitness Bands - Step counter sleep monitor band.", image: "https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=500" },
   { id: 610, name: "Diver Style Waterproof Watch 200m", category: "Watches", price: 169.99, description: "Diving Watches - Rotating bezel luminescence watch.", image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500" },
 
-  // --- ACCESSORIES (10 Types) ---
-  { id: 701, name: "UV Protection Aviator Sunglasses", category: "Accessories", price: 29.99, description: "Sunglasses - Metal frame polarized glasses.", image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500" },
-  { id: 702, name: "Genuine Leather RFID Wallet", category: "Accessories", price: 24.99, description: "Wallets - Bi-fold leather card holder wallet.", image: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=500" },
-  { id: 703, name: "Reversible Leather Belt", category: "Accessories", price: 19.99, description: "Belts - Black/Brown dual side dress belt.", image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500" },
-  { id: 704, name: "Winter Knit Beanie Cap", category: "Accessories", price: 14.99, description: "Caps & Hats - Soft warm wool beanie.", image: "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=500" },
-  { id: 705, name: "Adjustable Baseball Cap", category: "Accessories", price: 16.99, description: "Caps - Cotton sun visor casual cap.", image: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500" },
-  { id: 706, name: "100% Cashmere Winter Scarf", category: "Accessories", price: 34.99, description: "Scarves - Soft warm neck wrap scarf.", image: "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=500" },
-  { id: 707, name: "Touchscreen Winter Leather Gloves", category: "Accessories", price: 27.99, description: "Gloves - Thermal lined phone compatible gloves.", image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" },
-  { id: 708, name: "Stainless Steel Keyring Organizer", category: "Accessories", price: 9.99, description: "Keychains - Compact multi-key clip holder.", image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500" },
-  { id: 709, name: "Blue Light Blocking Glasses", category: "Accessories", price: 21.99, description: "Eyewear - Computer screen eye strain protection glasses.", image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500" },
-  { id: 710, name: "Silver Cufflinks & Tie Clip Set", category: "Accessories", price: 29.99, description: "Formal Accessories - Gift box suit accessories.", image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500" },
-
   // --- SKINCARE (10 Types) ---
   { id: 801, name: "Hydrating Facial Moisturizer", category: "Skincare", price: 24.99, description: "Moisturizers - Deep moisture hyaluronic cream.", image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=500" },
   { id: 802, name: "Vitamin C Brightening Serum", category: "Skincare", price: 29.99, description: "Serums - Anti-aging dark spot serum.", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500" },
@@ -128,29 +115,41 @@ const initialProducts = [
   { id: 1009, name: "Glass Meal Prep Food Containers (5 Pack)", category: "Kitchen", price: 31.99, description: "Storage - Airtight leak-proof glass boxes.", image: "https://images.unsplash.com/photo-1584992236310-6edddc08acff?w=500" },
   { id: 1010, name: "Stainless Steel Electric Kettle 1.7L", category: "Kitchen", price: 29.99, description: "Appliances - Quick boil automatic shutoff kettle.", image: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f6?w=500" },
 
-  // --- TOYS & GAMES (10 Types) ---
-  { id: 1101, name: "Speed Rubik's Cube 3x3", category: "Toys & Games", price: 14.99, description: "Puzzles - Smooth rotating brain puzzle cube.", image: "https://images.unsplash.com/photo-1563089145-599997674d42?w=500" },
-  { id: 1102, name: "Remote Control High-Speed Off-Road Car", category: "Toys & Games", price: 49.99, description: "RC Toys - 4WD rechargeable monster truck.", image: "https://images.unsplash.com/photo-1594787318286-3d835c1d207f?w=500" },
-  { id: 1103, name: "Wooden Chess Set Board Game", category: "Toys & Games", price: 29.99, description: "Board Games - Handcrafted folding magnetic chess.", image: "https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=500" },
-  { id: 1104, name: "Classic Building Bricks Set (500 Pcs)", category: "Toys & Games", price: 39.99, description: "Building Toys - Creative block construction kit.", image: "https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=500" },
-  { id: 1105, name: "Mini Indoor Basketball Hoop Set", category: "Toys & Games", price: 21.99, description: "Indoor Play - Over the door mini basket hoop.", image: "https://images.unsplash.com/photo-1519861531473-9200262188bf?w=500" },
-  { id: 1106, name: "HD Camera Mini Quadcopter Drone", category: "Toys & Games", price: 79.99, description: "Drones - Easy fly foldable beginner drone.", image: "https://images.unsplash.com/photo-1527977966376-1c8408f9f108?w=500" },
-  { id: 1107, name: "Soft Plush Teddy Bear 12-Inch", category: "Toys & Games", price: 16.99, description: "Plush - Ultra soft cuddly stuffed animal toy.", image: "https://images.unsplash.com/photo-1559454403-b8fb88521f11?w=500" },
-  { id: 1108, name: "Classic Family Card Game Pack", category: "Toys & Games", price: 9.99, description: "Card Games - Party game fun for kids & adults.", image: "https://images.unsplash.com/photo-1611891487122-207579d67d98?w=500" },
-  { id: 1109, name: "Water Blaster Squirt Gun", category: "Toys & Games", price: 12.99, description: "Outdoor Toys - Summer pool beach water toy.", image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=500" },
-  { id: 1110, name: "Educational Science Microscope Kit", category: "Toys & Games", price: 34.99, description: "STEM Toys - Beginner lab microscope for kids.", image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=500" },
+  // --- TOYS (10 Types) ---
+  { id: 1101, name: "Classic Building Bricks Set (500 Pcs)", category: "Toys", price: 39.99, description: "Building Toys - Creative block construction kit.", image: "https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=500" },
+  { id: 1102, name: "Remote Control High-Speed Off-Road Car", category: "Toys", price: 49.99, description: "RC Toys - 4WD rechargeable monster truck.", image: "https://images.unsplash.com/photo-1594787318286-3d835c1d207f?w=500" },
+  { id: 1103, name: "Soft Plush Teddy Bear 12-Inch", category: "Toys", price: 16.99, description: "Plush - Ultra soft cuddly stuffed animal toy.", image: "https://images.unsplash.com/photo-1559454403-b8fb88521f11?w=500" },
+  { id: 1104, name: "HD Camera Mini Quadcopter Drone", category: "Toys", price: 79.99, description: "Drones - Easy fly foldable beginner drone.", image: "https://images.unsplash.com/photo-1527977966376-1c8408f9f108?w=500" },
+  { id: 1105, name: "Educational Science Microscope Kit", category: "Toys", price: 34.99, description: "STEM Toys - Beginner lab microscope for kids.", image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=500" },
+  { id: 1106, name: "Water Blaster Squirt Gun", category: "Toys", price: 12.99, description: "Outdoor Toys - Summer pool beach water toy.", image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=500" },
+  { id: 1107, name: "Mini Indoor Basketball Hoop Set", category: "Toys", price: 21.99, description: "Indoor Play - Over the door mini basket hoop.", image: "https://images.unsplash.com/photo-1519861531473-9200262188bf?w=500" },
+  { id: 1108, name: "Die-Cast Race Car Collection (5 Pack)", category: "Toys", price: 18.99, description: "Vehicles - Metallic mini racing cars set.", image: "https://images.unsplash.com/photo-1594787318286-3d835c1d207f?w=500" },
+  { id: 1109, name: "Interactive Robot Toy with Lights & Sound", category: "Toys", price: 29.99, description: "Electronic Toys - Dancing programmable robot.", image: "https://images.unsplash.com/photo-1563089145-599997674d42?w=500" },
+  { id: 1110, name: "Kids Wooden Musical Xylophone", category: "Toys", price: 15.99, description: "Musical Toys - Rainbow colored sound instrument.", image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=500" },
+
+  // --- GAMES (10 Types) ---
+  { id: 1201, name: "Speed Rubik's Cube 3x3", category: "Games", price: 14.99, description: "Puzzles - Smooth rotating brain puzzle cube.", image: "https://images.unsplash.com/photo-1563089145-599997674d42?w=500" },
+  { id: 1202, name: "Wooden Chess Set Board Game", category: "Games", price: 29.99, description: "Board Games - Handcrafted folding magnetic chess.", image: "https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=500" },
+  { id: 1203, name: "Classic Family Card Game Pack", category: "Games", price: 9.99, description: "Card Games - Party game fun for kids & adults.", image: "https://images.unsplash.com/photo-1611891487122-207579d67d98?w=500" },
+  { id: 1204, name: "Deluxe Monopoly Strategy Board Game", category: "Games", price: 34.99, description: "Board Games - Real estate trading classic game.", image: "https://images.unsplash.com/photo-1611891487122-207579d67d98?w=500" },
+  { id: 1205, name: "Wood Tumble Tower Stacking Blocks", category: "Games", price: 19.99, description: "Party Games - 54 pcs natural timber blocks.", image: "https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=500" },
+  { id: 1206, name: "Professional Dartboard Set with Darts", category: "Games", price: 39.99, description: "Pub Games - Official size bristled dart board.", image: "https://images.unsplash.com/photo-1534158914592-062992fbe900?w=500" },
+  { id: 1207, name: "1000-Piece Jigsaw Puzzle Landscape", category: "Games", price: 16.99, description: "Puzzles - Premium cardboard scenic puzzle.", image: "https://images.unsplash.com/photo-1563089145-599997674d42?w=500" },
+  { id: 1208, name: "Fast Paced Tabletop Foosball Game", category: "Games", price: 44.99, description: "Tabletop Games - Mini soccer table arcade game.", image: "https://images.unsplash.com/photo-1614632537190-23e4146777db?w=500" },
+  { id: 1209, name: "Strategy Dominoes Double Six Set", category: "Games", price: 12.99, description: "Tile Games - Durable tin box domino set.", image: "https://images.unsplash.com/photo-1611891487122-207579d67d98?w=500" },
+  { id: 1210, name: "Magnetic Travel Backgammon & Checkers", category: "Games", price: 21.99, description: "Board Games - Portable 2-in-1 strategy set.", image: "https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=500" },
 
   // --- JEWELRY (10 Types) ---
-  { id: 1201, name: "Silver Pendant Necklace", category: "Jewelry", price: 45.00, description: "Necklaces - Sterling silver chain crystal pendant.", image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500" },
-  { id: 1202, name: "Gold Plated Hoop Earrings", category: "Jewelry", price: 29.99, description: "Earrings - Lightweight polished gold hoops.", image: "https://images.unsplash.com/photo-1630019852942-f89202989a59?w=500" },
-  { id: 1203, name: "Adjustable Crystal Tennis Bracelet", category: "Jewelry", price: 39.99, description: "Bracelets - Sparkly cubic zirconia bracelet.", image: "https://images.unsplash.com/photo-1611591475777-233ca706508c?w=500" },
-  { id: 1204, name: "Classic Solitaire Engagement Ring", category: "Jewelry", price: 89.99, description: "Rings - Sterling silver crystal solitaire ring.", image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=500" },
-  { id: 1205, name: "Freshwater Pearl Strand Necklace", category: "Jewelry", price: 79.99, description: "Pearls - Elegant cultured pearl choker necklace.", image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500" },
-  { id: 1206, name: "Men Titanium Carbide Black Ring", category: "Jewelry", price: 24.99, description: "Rings - Matte finish durable band ring.", image: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=500" },
-  { id: 1207, name: "Rose Gold Butterfly Studs", category: "Jewelry", price: 19.99, description: "Earrings - Cute minimalist hypoallergenic studs.", image: "https://images.unsplash.com/photo-1630019852942-f89202989a59?w=500" },
-  { id: 1208, name: "Vintage Locket Necklace Silver", category: "Jewelry", price: 34.99, description: "Lockets - Openable picture holder pendant.", image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500" },
-  { id: 1209, name: "Charm Bracelet with Beads", category: "Jewelry", price: 49.99, description: "Bracelets - Silver chain charm bead wristband.", image: "https://images.unsplash.com/photo-1611591475777-233ca706508c?w=500" },
-  { id: 1210, name: "Layered Chain Anklet Silver", category: "Jewelry", price: 14.99, description: "Anklets - Beach style adjustable ankle bracelet.", image: "https://images.unsplash.com/photo-1611591475777-233ca706508c?w=500" }
+  { id: 1301, name: "Silver Pendant Necklace", category: "Jewelry", price: 45.00, description: "Necklaces - Sterling silver chain crystal pendant.", image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500" },
+  { id: 1302, name: "Gold Plated Hoop Earrings", category: "Jewelry", price: 29.99, description: "Earrings - Lightweight polished gold hoops.", image: "https://images.unsplash.com/photo-1630019852942-f89202989a59?w=500" },
+  { id: 1303, name: "Adjustable Crystal Tennis Bracelet", category: "Jewelry", price: 39.99, description: "Bracelets - Sparkly cubic zirconia bracelet.", image: "https://images.unsplash.com/photo-1611591475777-233ca706508c?w=500" },
+  { id: 1304, name: "Classic Solitaire Engagement Ring", category: "Jewelry", price: 89.99, description: "Rings - Sterling silver crystal solitaire ring.", image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=500" },
+  { id: 1305, name: "Freshwater Pearl Strand Necklace", category: "Jewelry", price: 79.99, description: "Pearls - Elegant cultured pearl choker necklace.", image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500" },
+  { id: 1306, name: "Men Titanium Carbide Black Ring", category: "Jewelry", price: 24.99, description: "Rings - Matte finish durable band ring.", image: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=500" },
+  { id: 1307, name: "Rose Gold Butterfly Studs", category: "Jewelry", price: 19.99, description: "Earrings - Cute minimalist hypoallergenic studs.", image: "https://images.unsplash.com/photo-1630019852942-f89202989a59?w=500" },
+  { id: 1308, name: "Vintage Locket Necklace Silver", category: "Jewelry", price: 34.99, description: "Lockets - Openable picture holder pendant.", image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500" },
+  { id: 1309, name: "Charm Bracelet with Beads", category: "Jewelry", price: 49.99, description: "Bracelets - Silver chain charm bead wristband.", image: "https://images.unsplash.com/photo-1611591475777-233ca706508c?w=500" },
+  { id: 1310, name: "Layered Chain Anklet Silver", category: "Jewelry", price: 14.99, description: "Anklets - Beach style adjustable ankle bracelet.", image: "https://images.unsplash.com/photo-1611591475777-233ca706508c?w=500" }
 ];
 
 export default function App() {
@@ -244,11 +243,20 @@ export default function App() {
     <div className="bg-gray-50 min-h-screen text-gray-800 font-sans">
       {/* Top Navbar */}
       <nav className="bg-slate-900 text-white px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-50">
-        <button onClick={() => setCurrentPage('products')} className="text-xl font-bold tracking-wider uppercase focus:outline-none">
+        <button onClick={() => { setCurrentPage('products'); setSelectedCategory('All'); }} className="text-xl font-bold tracking-wider uppercase focus:outline-none">
           JAWAD KHAN STORE
         </button>
 
         <div className="flex items-center space-x-6 text-sm font-medium">
+          {/* Home Button Added Here */}
+          <button 
+            onClick={() => { setCurrentPage('products'); setSelectedCategory('All'); }} 
+            className={`flex items-center space-x-1 hover:text-gray-300 transition ${currentPage === 'products' ? 'text-white font-bold underline' : ''}`}
+          >
+            <Home className="w-4 h-4" />
+            <span>Home</span>
+          </button>
+
           <button onClick={() => setCurrentPage('products')} className={`hover:text-gray-300 transition ${currentPage === 'products' ? 'text-white font-bold underline' : ''}`}>
             Products
           </button>
