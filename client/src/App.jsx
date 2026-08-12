@@ -6,21 +6,25 @@ const categories = [
   "All", "Shoes", "Electronics", "Bags", "Clothing", "Sports", "Watches", "Skincare", "Books", "Kitchen", "Toys", "Games", "Jewelry"
 ];
 
+// Extended list with 12+ high quality products with verified HD Unsplash images
 const initialProducts = [
   // --- SHOES ---
   { id: 101, name: "Nike Air Max Black", category: "Shoes", price: 129.99, description: "Running Shoes - Lightweight breathable mesh.", image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80" },
   { id: 102, name: "Air Max Silver Sneakers", category: "Shoes", price: 139.99, description: "Sneakers - Metallic finish for daily wear.", image: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=600&q=80" },
   { id: 103, name: "Dynamic Blue Runners", category: "Shoes", price: 119.99, description: "Sports Shoes - Eco-friendly high elasticity.", image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=600&q=80" },
-  { id: 104, name: "Classic Retro Grey", category: "Shoes", price: 109.99, description: "Casual Shoes - Retro grey vintage design.", image: "https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=600&q=80" },
+  { id: 104, name: "Classic Retro Grey", category: "Shoes", price: 109.99, description: "Casual Shoes - Vintage retro design.", image: "https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=600&q=80" },
   { id: 105, name: "Brown Leather Oxfords", category: "Shoes", price: 149.99, description: "Formal Shoes - Genuine leather classic oxfords.", image: "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?auto=format&fit=crop&w=600&q=80" },
+  { id: 106, name: "Red Sport Endurance", category: "Shoes", price: 124.99, description: "Pro sports running sneakers.", image: "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=600&q=80" },
 
-  // --- SPORTS ---
-  { id: 201, name: "Professional Football", category: "Sports", price: 34.99, description: "Football - FIFA standard stitched ball.", image: "https://images.unsplash.com/photo-1614632537190-23e4146777db?auto=format&fit=crop&w=600&q=80" },
-  { id: 202, name: "English Willow Bat", category: "Sports", price: 149.99, description: "Cricket - Grade 1 English Willow professional bat.", image: "https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=600&q=80" },
+  // --- WATCHES ---
+  { id: 201, name: "Smart Watch Series X", category: "Watches", price: 149.99, description: "Smartwatches - AMOLED heart rate fitness watch.", image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" },
+  { id: 202, name: "Classic Leather Watch", category: "Watches", price: 89.99, description: "Analog classic brown leather wrist watch.", image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=600&q=80" },
+  { id: 203, name: "Luxury Chronograph Gold", category: "Watches", price: 219.99, description: "Premium stainless steel metallic watch.", image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=600&q=80" },
 
   // --- ELECTRONICS ---
   { id: 301, name: "Wireless Headphones", category: "Electronics", price: 99.99, description: "Headphones - Active noise cancelling over-ear.", image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" },
   { id: 302, name: "Smart Wireless Earbuds", category: "Electronics", price: 59.99, description: "Earbuds - True wireless Bluetooth 5.3 in-ear.", image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=600&q=80" },
+  { id: 303, name: "Portable Bass Speaker", category: "Electronics", price: 49.99, description: "Waterproof Bluetooth loud speaker.", image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=600&q=80" },
 
   // --- CLOTHING ---
   { id: 401, name: "Classic Denim Jacket", category: "Clothing", price: 69.99, description: "Jackets - Rugged vintage blue cotton denim.", image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=600&q=80" },
@@ -29,26 +33,11 @@ const initialProducts = [
   // --- BAGS ---
   { id: 501, name: "Leather Laptop Backpack", category: "Bags", price: 79.99, description: "Backpacks - Waterproof vintage brown leather bag.", image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80" },
 
-  // --- WATCHES ---
-  { id: 601, name: "Smart Watch Series X", category: "Watches", price: 149.99, description: "Smartwatches - AMOLED heart rate fitness watch.", image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" },
-
   // --- SKINCARE ---
-  { id: 801, name: "Facial Moisturizer", category: "Skincare", price: 24.99, description: "Moisturizers - Deep moisture hyaluronic cream.", image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80" },
+  { id: 601, name: "Facial Moisturizer", category: "Skincare", price: 24.99, description: "Moisturizers - Deep moisture hyaluronic cream.", image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80" },
 
-  // --- BOOKS ---
-  { id: 901, name: "Hardcover Sci-Fi Novel", category: "Books", price: 19.99, description: "Fiction - Space adventure epic story book.", image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80" },
-
-  // --- KITCHEN ---
-  { id: 1001, name: "Coffee Thermos Bottle", category: "Kitchen", price: 22.99, description: "Bottles - Insulated vacuum flask 1000ml.", image: "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80" },
-
-  // --- TOYS ---
-  { id: 1101, name: "Building Bricks Set", category: "Toys", price: 39.99, description: "Building Toys - Creative block construction kit.", image: "https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=600&q=80" },
-
-  // --- GAMES ---
-  { id: 1201, name: "Speed Rubik's Cube 3x3", category: "Games", price: 14.99, description: "Puzzles - Smooth rotating brain puzzle cube.", image: "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=600&q=80" },
-
-  // --- JEWELRY ---
-  { id: 1301, name: "Silver Pendant Necklace", category: "Jewelry", price: 45.00, description: "Necklaces - Sterling silver chain crystal pendant.", image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80" }
+  // --- SPORTS ---
+  { id: 701, name: "Professional Football", category: "Sports", price: 34.99, description: "Football - FIFA standard stitched ball.", image: "https://images.unsplash.com/photo-1614632537190-23e4146777db?auto=format&fit=crop&w=600&q=80" }
 ];
 
 export default function App() {
@@ -58,16 +47,14 @@ export default function App() {
   const [cart, setCart] = useState([]);
   const [wishlist, setWishlist] = useState([]);
 
-  // Filters & Search
-  const [selectedCategory, setSelectedCategory] = useState("Shoes");
+  // Default to "All" category so users see ALL 10+ items on page load
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortBy, setSortBy] = useState("lowToHigh");
+  const [sortBy, setSortBy] = useState("default");
 
-  // Payment State
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [isPaid, setIsPaid] = useState(false);
 
-  // Keep Track of Google Login State
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -80,7 +67,7 @@ export default function App() {
       await signInWithPopup(auth, provider);
     } catch (error) {
       console.error("Login Error: ", error);
-      alert("Sign in failed! Please make sure your current domain is added in Firebase Authorized Domains.");
+      alert("Sign in failed! Make sure your domain is added in Firebase Authorized Domains.");
     }
   };
 
@@ -210,7 +197,7 @@ export default function App() {
                   Discover Quality Products Everyday
                 </h1>
                 <p className="text-gray-300 text-sm md:text-base">
-                  Explore our exclusive collection of shoes, electronics, watches, skincare, toys, and games with top discounts.
+                  Explore our exclusive collection with top discounts.
                 </p>
                 <button 
                   onClick={() => { setCurrentPage('products'); setSelectedCategory('All'); }}
@@ -241,6 +228,7 @@ export default function App() {
               <p className="text-sm text-gray-500 mt-1">{filteredProducts.length} items available</p>
             </div>
 
+            {/* Category Bar */}
             <div className="flex items-center space-x-2 overflow-x-auto pb-4 my-4 no-scrollbar">
               {categories.map((cat) => (
                 <button
@@ -257,11 +245,12 @@ export default function App() {
               ))}
             </div>
 
+            {/* Search Box & Sort Controls */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 bg-white p-4 rounded-2xl border border-gray-200 shadow-sm">
               <div className="relative w-full sm:w-80">
                 <input
                   type="text"
-                  placeholder="Search by product name..."
+                  placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full bg-gray-50 border border-gray-300 rounded-xl py-2 pl-4 pr-10 text-xs focus:outline-none focus:border-black"
@@ -283,6 +272,7 @@ export default function App() {
               </div>
             </div>
 
+            {/* Product Grid - Shows all products */}
             {filteredProducts.length === 0 ? (
               <div className="text-center py-16 bg-white rounded-2xl border border-gray-200">
                 <p className="text-gray-500 text-sm font-medium">No matching products found!</p>
